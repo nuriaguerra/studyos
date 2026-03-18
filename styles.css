@@ -1,0 +1,1293 @@
+/* ===============================
+   FUENTES
+   ===============================
+   @import carga fuentes externas. Aquí usamos Google Fonts.
+   Las fuentes ya están en el <head> del HTML, esto es solo por si acaso. */
+
+/* ===============================
+   VARIABLES GLOBALES (TEMA BASE)
+   ===============================
+   :root representa el elemento raíz de la página (el <html>).
+   Las variables CSS se definen con --nombre: valor;
+   y se usan con var(--nombre).
+   Esto nos permite cambiar toda la paleta desde un solo sitio. */
+:root {
+  /* --- MODO OSCURO POR DEFECTO --- */
+  --bg:       #0e0e0e;   /* Fondo principal: negro casi puro */
+  --bg2:      #1a1a1a;   /* Fondo de tarjetas: negro suave */
+  --bg3:      #242424;   /* Fondo de elementos secundarios */
+  --text:     #f0ece4;   /* Texto principal: blanco cálido */
+  --muted:    #888580;   /* Texto secundario: gris medio */
+  --border:   #2e2e2e;   /* Bordes: gris muy oscuro */
+
+  /* --- ACENTO (cambia con el tema) --- */
+  --accent:   #7a1f2e;   /* Burdeos por defecto */
+  --accent2:  #a84455;   /* Burdeos más claro para degradados */
+  --on-accent:#f0ece4;   /* Texto sobre el acento */
+
+  /* --- TIPOGRAFÍA --- */
+  --font-display: 'Cormorant Garamond', Georgia, serif; /* Fuente para títulos */
+  --font-body:    'DM Sans', system-ui, sans-serif;     /* Fuente para cuerpo */
+
+  /* --- ESPACIADO Y FORMA --- */
+  --radius:   12px;   /* Radio de esquinas redondeadas */
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+
+  /* --- TRANSICIONES --- */
+  --transition: 0.2s ease; /* Duración de animaciones suaves */
+}
+
+/* ===============================
+   MODO CLARO
+   ===============================
+   Cuando el <body> tiene la clase "light-mode",
+   sobreescribimos las variables de color.
+   Así toda la app cambia con una sola clase. */
+body.light-mode {
+  --bg:     #f5f0e8;   /* Beige claro */
+  --bg2:    #ffffff;   /* Blanco puro para tarjetas */
+  --bg3:    #ede8df;   /* Beige más oscuro */
+  --text:   #1a1a1a;   /* Texto casi negro */
+  --muted:  #7a7570;   /* Gris medio */
+  --border: #d8d3ca;   /* Borde beige oscuro */
+}
+
+/* ===============================
+   TEMAS DE COLOR
+   ===============================
+   Cada tema sobreescribe solo las variables de acento.
+   El resto de colores (bg, text...) los controla el modo claro/oscuro. */
+
+/* Tema por defecto: Burdeos (nivel 1) */
+body.theme-bordo {
+  --accent:  #7a1f2e;
+  --accent2: #a84455;
+}
+
+/* Tema Pizarra azul (nivel 5) */
+body.theme-pizarra {
+  --accent:  #2c4a6e;
+  --accent2: #3d6494;
+}
+
+/* Tema Tierra (nivel 8) */
+body.theme-tierra {
+  --accent:  #7a4f2e;
+  --accent2: #a86d45;
+}
+
+/* Tema Negro total (nivel 10) */
+body.theme-negro {
+  --accent:  #3a3a3a;
+  --accent2: #555555;
+}
+
+/* ===============================
+   RESET BÁSICO
+   ===============================
+   Eliminamos los estilos por defecto del navegador
+   para tener control total sobre el diseño. */
+*, *::before, *::after {
+  box-sizing: border-box;
+  /* box-sizing: border-box hace que padding y border
+     se incluyan dentro del ancho/alto del elemento */
+  margin: 0;
+  padding: 0;
+}
+
+/* ===============================
+   BODY (PÁGINA ENTERA)
+   =============================== */
+body {
+  font-family: var(--font-body);
+  /* font-family define la fuente. var() usa nuestra variable */
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  /* min-height: 100vh hace que el body ocupe al menos toda la pantalla */
+  overflow-x: hidden;
+  /* overflow-x: hidden evita el scroll horizontal */
+  transition: background var(--transition), color var(--transition);
+  /* transition anima el cambio de colores al cambiar de modo */
+  line-height: 1.6;
+  /* line-height controla el espacio entre líneas de texto */
+}
+
+/* ===============================
+   TIPOGRAFÍA BASE
+   =============================== */
+
+/* Los h1, h2, h3 usan la fuente de display (Cormorant Garamond) */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  /* font-weight: 400 es el peso normal (600 sería seminegrita, 700 negrita) */
+  letter-spacing: 0.02em;
+  /* letter-spacing añade espacio entre letras para elegancia */
+}
+
+/* ===============================
+   CABECERA PRINCIPAL
+   =============================== */
+.topbar {
+  display: flex;
+  /* display: flex activa Flexbox, el sistema de layout moderno */
+  justify-content: space-between;
+  /* justify-content: space-between empuja los hijos a los extremos */
+  align-items: center;
+  /* align-items: center los centra verticalmente */
+  padding: 20px 24px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  /* position: sticky hace que la cabecera se quede fija al hacer scroll */
+  top: 0;
+  z-index: 100;
+  /* z-index: 100 hace que esté por encima de otros elementos */
+}
+
+.topbar-left {
+  display: flex;
+  flex-direction: column;
+  /* flex-direction: column apila los hijos verticalmente */
+  gap: 2px;
+  /* gap: espacio entre hijos en flex/grid */
+}
+
+.app-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  /* rem es relativo al tamaño de fuente raíz (normalmente 16px) */
+  /* 1.6rem = 1.6 × 16px = 25.6px */
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+.user-title {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* text-transform: uppercase convierte el texto a mayúsculas */
+}
+
+.topbar-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ===============================
+   BOTONES DE ICONO
+   =============================== */
+.icon-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: pointer;
+  /* cursor: pointer cambia el cursor a manita */
+  font-size: 1rem;
+  padding: 6px 10px;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.icon-btn:hover {
+  /* :hover se aplica cuando el ratón pasa por encima */
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.icon-btn-sm {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  transition: color var(--transition);
+}
+
+.icon-btn-sm:hover {
+  color: var(--accent);
+}
+
+/* ===============================
+   BARRA DE NAVEGACIÓN
+   =============================== */
+.navbar {
+  display: flex;
+  gap: 0;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  overflow-x: auto;
+  /* overflow-x: auto añade scroll horizontal si los botones no caben */
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  /* border-bottom: 2px solid transparent crea un espacio para la línea activa */
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 14px 18px;
+  transition: color var(--transition), border-color var(--transition);
+  white-space: nowrap;
+  /* white-space: nowrap evita que el texto del botón se parta en varias líneas */
+}
+
+.nav-btn:hover {
+  color: var(--text);
+}
+
+/* El botón de la página activa tiene el color de acento y la línea inferior */
+.nav-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ===============================
+   CONTENEDOR PRINCIPAL
+   =============================== */
+.container {
+  width: min(800px, 92%);
+  /* min() elige el valor más pequeño: 800px o el 92% del ancho */
+  /* Así en pantallas grandes no se estira demasiado */
+  margin: 0 auto 60px;
+  /* margin: 0 auto centra el bloque horizontalmente */
+  padding-top: 24px;
+}
+
+/* ===============================
+   TARJETAS
+   =============================== */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: background var(--transition);
+}
+
+/* ===============================
+   PERFIL
+   =============================== */
+.profile-card {
+  margin-top: 0;
+}
+
+.profile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.name-row h2 {
+  font-size: 1.6rem;
+}
+
+.level-text {
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.xp-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.xp-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.xp-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* Barra de XP */
+.xp-bar {
+  width: 100%;
+  height: 3px;
+  /* Barra muy fina para look minimalista */
+  background: var(--bg3);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.xp-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+/* Racha diaria */
+.streak-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.streak-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.streak-value {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.streak-icon {
+  margin-left: auto;
+  font-size: 1.1rem;
+}
+
+/* Desbloqueos */
+.unlock-box {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.unlock-box summary {
+  font-size: 0.8rem;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  /* user-select: none evita que el texto se seleccione al hacer clic */
+  letter-spacing: 0.05em;
+}
+
+.unlock-box ul {
+  margin-top: 8px;
+  padding-left: 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 2;
+}
+
+/* ===============================
+   GRID DE ESTADÍSTICAS
+   =============================== */
+.grid-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  /* repeat(auto-fit, minmax(140px, 1fr)):
+     - auto-fit: crea tantas columnas como quepan
+     - minmax(140px, 1fr): cada columna mide mínimo 140px y máximo 1 fracción */
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* ===============================
+   TÍTULOS DE SECCIÓN
+   =============================== */
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+}
+
+/* ===============================
+   ACTIVIDAD RECIENTE
+   =============================== */
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-xp {
+  margin-left: auto;
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.empty-msg {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* ===============================
+   FORMULARIOS
+   =============================== */
+
+/* Formulario en línea: input + botón en la misma fila */
+.form-inline {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.form-inline input {
+  flex: 1;
+  /* flex: 1 hace que el input ocupe todo el espacio disponible */
+}
+
+/* Formulario en cuadrícula para el de exámenes */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* El botón de submit ocupa las dos columnas */
+.form-grid button {
+  grid-column: 1 / -1;
+  /* grid-column: 1 / -1 hace que ocupe desde la primera hasta la última columna */
+}
+
+/* Estilos comunes para inputs y selects */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 10px 14px;
+  transition: border-color var(--transition);
+  width: 100%;
+  /* width: 100% hace que ocupen todo el ancho del contenedor */
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  /* :focus se aplica cuando el elemento está seleccionado */
+  outline: none;
+  /* outline: none quita el borde azul por defecto del navegador */
+  border-color: var(--accent);
+}
+
+textarea {
+  resize: vertical;
+  /* resize: vertical solo permite cambiar el alto, no el ancho */
+  min-height: 80px;
+}
+
+/* ===============================
+   BOTONES
+   =============================== */
+
+/* Botón principal */
+.btn-primary {
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--on-accent);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  transition: opacity var(--transition), transform var(--transition);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+  /* transform: translateY(-1px) sube el botón 1px al hacer hover */
+}
+
+.btn-primary:active {
+  /* :active se aplica cuando el botón está siendo pulsado */
+  transform: translateY(0);
+}
+
+/* Botón secundario (contorno) */
+.btn-secondary {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  transition: border-color var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Botón de eliminar */
+.btn-danger {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  transition: color var(--transition);
+}
+
+.btn-danger:hover {
+  color: #c0392b;
+}
+
+/* ===============================
+   ACORDEÓN DE ASIGNATURAS
+   =============================== */
+.asig-accordion {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+
+.asig-accordion:hover {
+  border-color: var(--accent);
+}
+
+/* Cabecera clicable del acordeón */
+.asig-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--bg3);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition);
+}
+
+.asig-header:hover {
+  background: var(--bg2);
+  filter: brightness(1.05);
+}
+
+.asig-nombre {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 400;
+  flex: 1;
+}
+
+.asig-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Mini barra de progreso en la cabecera */
+.mini-bar {
+  width: 60px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.asig-pct {
+  color: var(--accent);
+  font-size: 0.78rem;
+  min-width: 30px;
+  text-align: right;
+}
+
+.asig-arrow {
+  font-size: 0.7rem;
+  color: var(--muted);
+  transition: transform 0.25s ease;
+}
+
+/* Cuando el acordeón está abierto, giramos la flecha */
+.asig-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Cuerpo del acordeón (contenido expandible) */
+.asig-body {
+  display: none;
+  padding: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.asig-body.open {
+  display: block;
+}
+
+/* ===============================
+   ETIQUETAS DE SECCIÓN INTERNA
+   =============================== */
+.inner-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 16px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* El botón pequeño de añadir junto a la etiqueta */
+.inner-label .add-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.inner-label .add-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Formulario que aparece/desaparece al pulsar añadir */
+.mini-form {
+  display: none;
+  /* display:none lo oculta. app.js lo cambia a flex para mostrarlo */
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.mini-form.visible {
+  display: flex;
+}
+
+.mini-form input {
+  flex: 1;
+  min-width: 120px;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+}
+
+.mini-form button {
+  font-size: 0.8rem;
+  padding: 8px 14px;
+}
+
+/* ===============================
+   TEMAS (dentro de asignaturas)
+   =============================== */
+.tema-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition);
+}
+
+.tema-row:hover {
+  background: var(--bg3);
+}
+
+/* Botón del estado del tema (el emoji clicable) */
+.tema-estado-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  /* flex-shrink: 0 evita que el botón se encoja */
+  transition: transform var(--transition);
+}
+
+.tema-estado-btn:hover {
+  transform: scale(1.2);
+}
+
+.tema-nombre {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+/* Etiqueta del estado actual */
+.tema-estado-label {
+  font-size: 0.72rem;
+  border-radius: 99px;
+  padding: 2px 10px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+/* Colores para cada estado */
+.estado-none    { background: var(--bg3); color: var(--muted); }
+.estado-leyendo { background: #1a3a5c; color: #7ec8e3; }
+.estado-repasar { background: #3b2800; color: #f0a500; }
+.estado-sabido  { background: #0f3320; color: #5dbb7a; }
+
+/* En modo claro los colores de estado son más suaves */
+body.light-mode .estado-leyendo { background: #d4eaf7; color: #1a5c8a; }
+body.light-mode .estado-repasar { background: #fff0cc; color: #8a6000; }
+body.light-mode .estado-sabido  { background: #d4f0de; color: #1a6b3a; }
+
+/* ===============================
+   TAREAS
+   =============================== */
+.tarea-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  transition: background var(--transition);
+}
+
+.tarea-item:hover {
+  background: var(--bg3);
+}
+
+/* Checkbox con el color del acento */
+.tarea-item input[type="checkbox"] {
+  accent-color: var(--accent);
+  /* accent-color cambia el color del checkbox nativo */
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+}
+
+.tarea-titulo {
+  flex: 1;
+}
+
+/* Tarea completada: texto tachado y semitransparente */
+.tarea-item.done .tarea-titulo {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+/* Fecha límite */
+.tarea-fecha {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.tarea-fecha.urgente { color: #e67e22; font-weight: 500; }
+.tarea-fecha.vencida { color: #c0392b; font-weight: 500; }
+
+/* Estrellas de dificultad */
+.tarea-dificultad {
+  font-size: 0.7rem;
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+/* Cuadraditos de días (tareas prorateadas) */
+.dias-grid {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 6px 0 6px 26px;
+}
+
+.dia-cuadrado {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.dia-cuadrado.marcado {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.dia-cuadrado:hover {
+  border-color: var(--accent);
+}
+
+/* Desplegable de completadas */
+.completadas-details {
+  margin-top: 8px;
+}
+
+.completadas-details summary {
+  font-size: 0.78rem;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 0;
+  letter-spacing: 0.03em;
+}
+
+/* Notas de tarea/tema */
+.nota-box {
+  display: none;
+  /* app.js lo muestra/oculta */
+  margin: 4px 0 4px 26px;
+}
+
+.nota-box.visible {
+  display: block;
+}
+
+.nota-box textarea {
+  font-size: 0.82rem;
+  min-height: 60px;
+  padding: 8px 10px;
+}
+
+/* ===============================
+   BADGE DE TAREAS PENDIENTES
+   =============================== */
+.badge {
+  background: var(--accent);
+  border-radius: 99px;
+  color: var(--on-accent);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 1px 7px;
+}
+
+/* ===============================
+   EXÁMENES
+   =============================== */
+.examen-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.examen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.examen-asig {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.examen-fecha {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.examen-dias {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.examen-dias.urgente { color: #e67e22; }
+.examen-dias.vencido { color: var(--muted); }
+.examen-dias.ok      { color: #5dbb7a; }
+
+.examen-nota {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.examen-nota.aprobado { color: #5dbb7a; font-weight: 500; }
+.examen-nota.suspenso { color: #c0392b; font-weight: 500; }
+
+/* Chips de estado de temas en el examen */
+.temas-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tema-chip {
+  font-size: 0.72rem;
+  border-radius: 99px;
+  padding: 3px 10px;
+}
+
+/* ===============================
+   POMODORO
+   =============================== */
+.pomodoro-card {
+  text-align: center;
+}
+
+.pomodoro-ring-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 24px auto;
+}
+
+.pomodoro-ring {
+  width: 180px;
+  height: 180px;
+  transform: rotate(-90deg);
+  /* rotate(-90deg) hace que el anillo empiece desde arriba */
+}
+
+.ring-bg {
+  fill: none;
+  stroke: var(--bg3);
+  stroke-width: 6;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+  /* stroke-linecap: round hace las puntas del anillo redondeadas */
+  transition: stroke-dashoffset 0.8s ease, stroke 0.5s ease;
+}
+
+/* El texto encima del anillo */
+.pomodoro-center {
+  position: absolute;
+  /* position: absolute se posiciona relativo al padre con position: relative */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* pointer-events: none hace que los clics pasen a través del elemento */
+}
+
+.pomodoro-time {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+.pomodoro-status {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+.pomodoro-config {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.pomodoro-config label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pomodoro-config input {
+  width: 48px;
+  text-align: center;
+  padding: 6px 8px;
+  font-size: 0.82rem;
+}
+
+.pomodoro-btns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pomo-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 8px 20px;
+  transition: all var(--transition);
+}
+
+.pomo-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* Estado activo del botón iniciar */
+.pomo-btn.active-start {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Estado activo del botón pausar */
+.pomo-btn.active-pause {
+  background: var(--bg3);
+  border-color: #c0392b;
+  color: var(--text);
+}
+
+/* ===============================
+   MODALES (OVERLAYS)
+   =============================== */
+.overlay {
+  position: fixed;
+  /* position: fixed se fija en la pantalla, no se mueve al hacer scroll */
+  inset: 0;
+  /* inset: 0 equivale a top:0; right:0; bottom:0; left:0 → cubre toda la pantalla */
+  background: rgba(0, 0, 0, 0.6);
+  /* rgba permite color con transparencia: rgba(rojo, verde, azul, opacidad) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  /* z-index: 999 hace que esté por encima de todo lo demás */
+  padding: 20px;
+}
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  /* overflow-y: auto añade scroll vertical si el contenido es largo */
+  padding: 32px;
+  width: 100%;
+}
+
+.modal h3 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.modal h4 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.modal .btn-primary {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 0.9rem;
+}
+
+/* Modal centrado para subida de nivel */
+.modal-center {
+  text-align: center;
+}
+
+.levelup-icon {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+/* ===============================
+   AJUSTES — SELECTOR DE TEMA
+   =============================== */
+.settings-section {
+  margin-bottom: 24px;
+}
+
+.settings-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.theme-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.theme-btn {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg3);
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 8px 16px;
+  transition: all var(--transition);
+}
+
+.theme-btn:hover {
+  border-color: var(--accent);
+}
+
+.theme-btn.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.theme-btn.locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.theme-btn.locked:hover {
+  border-color: var(--border);
+}
+
+/* ===============================
+   RESPONSIVE (MÓVILES)
+   ===============================
+   @media aplica estilos solo cuando se cumple la condición.
+   max-width: 600px → solo en pantallas de 600px o menos (móviles) */
+@media (max-width: 600px) {
+
+  .topbar {
+    padding: 16px 16px 10px;
+  }
+
+  .container {
+    width: 95%;
+    padding-top: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  /* En móvil el formulario de exámenes es de una columna */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-stats {
+    grid-template-columns: 1fr 1fr;
+    /* En móvil: 2 columnas en lugar de 4 */
+  }
+
+  .pomodoro-ring-container {
+    width: 150px;
+    height: 150px;
+  }
+
+  .pomodoro-ring {
+    width: 150px;
+    height: 150px;
+  }
+
+  .pomodoro-time {
+    font-size: 1.6rem;
+  }
+}
