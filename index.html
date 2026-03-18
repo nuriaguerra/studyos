@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!-- Le dice al navegador que usamos HTML5, la versión moderna -->
+<html lang="es">
+<!-- lang="es" ayuda a los lectores de pantalla y al navegador a saber el idioma -->
+
+<head>
+  <!-- El <head> contiene información sobre la página, pero no se ve en pantalla -->
+  <meta charset="UTF-8" />
+  <!-- Permite usar tildes, ñ y otros caracteres especiales -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Hace que la página se vea bien en móviles (responsive) -->
+
+  <title>StudyOS</title>
+  <!-- El texto que aparece en la pestaña del navegador -->
+
+  <!-- Google Fonts: cargamos dos fuentes externas -->
+  <!-- "Cormorant Garamond" para títulos elegantes -->
+  <!-- "DM Sans" para el texto del cuerpo, limpio y moderno -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Conectamos nuestro archivo de estilos CSS -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="theme-bordo dark-mode">
+  <!-- class="theme-bordo dark-mode" aplica el tema y el modo oscuro por defecto -->
+  <!-- app.js cambiará estas clases cuando el usuario cambie de tema o modo -->
+
+  <!-- =============================== -->
+  <!-- CABECERA PRINCIPAL              -->
+  <!-- =============================== -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <!-- Nombre de la app -->
+      <h1 class="app-title">StudyOS</h1>
+      <!-- Subtítulo dinámico: app.js pondrá aquí el título del nivel actual -->
+      <span class="user-title" id="userTitle">Estudiante</span>
+    </div>
+    <div class="topbar-right">
+      <!-- Botón para cambiar entre modo claro y oscuro -->
+      <!-- onclick llama a la función toggleMode() definida en app.js -->
+      <button class="icon-btn" onclick="toggleMode()" title="Cambiar modo">◐</button>
+      <!-- Botón para abrir el panel de ajustes -->
+      <button class="icon-btn" onclick="openSettings()" title="Ajustes">⚙</button>
+    </div>
+  </header>
+
+  <!-- =============================== -->
+  <!-- BARRA DE NAVEGACIÓN             -->
+  <!-- =============================== -->
+  <!-- Cada botón llama a navigateTo() con el nombre de la sección -->
+  <nav class="navbar">
+    <button class="nav-btn active" onclick="navigateTo('inicio')">Inicio</button>
+    <button class="nav-btn" onclick="navigateTo('asignaturas')">Asignaturas</button>
+    <button class="nav-btn" onclick="navigateTo('examenes')">Exámenes</button>
+    <button class="nav-btn" onclick="navigateTo('pomodoro')">Pomodoro</button>
+  </nav>
+
+  <!-- =============================== -->
+  <!-- CONTENEDOR PRINCIPAL            -->
+  <!-- =============================== -->
+  <main class="container">
+
+    <!-- =============================== -->
+    <!-- PÁGINA: INICIO                  -->
+    <!-- =============================== -->
+    <div id="page-inicio">
+
+      <!-- PERFIL Y NIVEL -->
+      <section class="card profile-card">
+        <div class="profile-top">
+          <div class="profile-info">
+            <!-- Nombre editable del usuario -->
+            <div class="name-row">
+              <h2 id="playerName">Estudiante</h2>
+              <!-- ✏️ llama a editName() para cambiar el nombre -->
+              <button class="icon-btn-sm" onclick="editName()">✏</button>
+            </div>
+            <!-- Nivel actual, app.js lo actualiza -->
+            <p class="level-text" id="levelText">Nivel 1</p>
+          </div>
+          <!-- Caja con la XP actual -->
+          <div class="xp-box">
+            <span class="xp-label">XP</span>
+            <span class="xp-value" id="xpText">0 / 100</span>
+          </div>
+        </div>
+
+        <!-- Barra de progreso de XP -->
+        <!-- La barra vacía de fondo -->
+        <div class="xp-bar">
+          <!-- La parte coloreada que crece. app.js cambia su width -->
+          <div class="xp-fill" id="xpFill"></div>
+        </div>
+
+        <!-- Racha diaria -->
+        <div class="streak-row">
+          <!-- app.js actualiza estos valores -->
+          <span class="streak-label">Racha</span>
+          <span class="streak-value" id="streakText">0 días</span>
+          <span class="streak-icon" id="streakIcon">○</span>
+        </div>
+
+        <!-- Desbloqueos conseguidos -->
+        <!-- <details> es un elemento HTML nativo que se expande al hacer clic -->
+        <details class="unlock-box">
+          <summary>Desbloqueos</summary>
+          <!-- app.js llenará esta lista con los desbloqueos conseguidos -->
+          <ul id="unlockList"></ul>
+        </details>
+      </section>
+
+      <!-- RESUMEN RÁPIDO -->
+      <!-- display:grid con auto-fit hace que las columnas se adapten al ancho -->
+      <section class="grid-stats">
+
+        <div class="stat-card">
+          <!-- app.js actualizará estos números -->
+          <span class="stat-number" id="statTareas">0</span>
+          <span class="stat-label">Tareas pendientes</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-number" id="statTemas">0</span>
+          <span class="stat-label">Temas dominados</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-number" id="statExamenes">0</span>
+          <span class="stat-label">Exámenes próximos</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-number" id="statXpTotal">0</span>
+          <span class="stat-label">XP total</span>
+        </div>
+
+      </section>
+
+      <!-- ACTIVIDAD RECIENTE -->
+      <section class="card">
+        <h3 class="section-title">Actividad reciente</h3>
+        <!-- app.js llenará esta lista con las últimas acciones -->
+        <div id="actividadList">
+          <p class="empty-msg">Aún no hay actividad. ¡Empieza estudiando!</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- =============================== -->
+    <!-- PÁGINA: ASIGNATURAS             -->
+    <!-- =============================== -->
+    <!-- style="display:none" oculta la página por defecto -->
+    <!-- navigateTo() la mostrará cuando se pulse el botón correspondiente -->
+    <div id="page-asignaturas" style="display:none">
+
+      <section class="card">
+        <div class="section-header">
+          <h3 class="section-title">Mis asignaturas</h3>
+        </div>
+
+        <!-- Formulario para añadir una nueva asignatura -->
+        <!-- onsubmit llama a addAsignatura() y preventDefault evita recargar la página -->
+        <form class="form-inline" onsubmit="addAsignatura(event)">
+          <input type="text" id="asignaturaInput" placeholder="Nueva asignatura..." required />
+          <button type="submit" class="btn-primary">Añadir</button>
+        </form>
+
+        <!-- Aquí app.js renderizará las tarjetas de asignaturas -->
+        <div id="asignaturasList"></div>
+      </section>
+
+    </div>
+
+    <!-- =============================== -->
+    <!-- PÁGINA: EXÁMENES                -->
+    <!-- =============================== -->
+    <div id="page-examenes" style="display:none">
+
+      <section class="card">
+        <div class="section-header">
+          <h3 class="section-title">Exámenes</h3>
+        </div>
+
+        <!-- Formulario para añadir un examen -->
+        <form class="form-grid" onsubmit="addExamen(event)">
+
+          <!-- Nombre de la asignatura del examen -->
+          <!-- Este select lo llenará app.js con las asignaturas existentes -->
+          <select id="examenAsignatura" required>
+            <option value="">Asignatura...</option>
+          </select>
+
+          <!-- Fecha del examen -->
+          <input type="date" id="examenFecha" required />
+
+          <!-- Nota obtenida (opcional, se rellena después de hacer el examen) -->
+          <input type="number" id="examenNota" placeholder="Nota (opcional)" min="0" max="10" step="0.1" />
+
+          <!-- Nota máxima (por defecto 10, pero puede ser sobre 5, 20, etc.) -->
+          <input type="number" id="examenNotaMax" placeholder="Sobre (ej: 10)" value="10" min="1" />
+
+          <button type="submit" class="btn-primary">Añadir examen</button>
+        </form>
+
+        <!-- Aquí app.js renderizará la lista de exámenes -->
+        <div id="examenesList"></div>
+      </section>
+
+    </div>
+
+    <!-- =============================== -->
+    <!-- PÁGINA: POMODORO                -->
+    <!-- =============================== -->
+    <div id="page-pomodoro" style="display:none">
+
+      <section class="card pomodoro-card">
+        <h3 class="section-title">Pomodoro</h3>
+
+        <!-- Anillo SVG del temporizador -->
+        <!-- SVG es un formato de gráficos vectoriales que podemos dibujar con código -->
+        <div class="pomodoro-ring-container">
+          <svg class="pomodoro-ring" viewBox="0 0 120 120">
+            <!-- Círculo de fondo gris -->
+            <circle class="ring-bg" cx="60" cy="60" r="54" />
+            <!-- Círculo de progreso que se va vaciando. app.js cambia su strokeDashoffset -->
+            <circle class="ring-progress" id="ringProgress" cx="60" cy="60" r="54" />
+          </svg>
+          <!-- Texto del tiempo encima del anillo -->
+          <div class="pomodoro-center">
+            <div class="pomodoro-time" id="pomodoroDisplay">25:00</div>
+            <!-- Estado actual: Trabajo o Descanso -->
+            <p class="pomodoro-status" id="pomodoroStatus">Trabajo</p>
+          </div>
+        </div>
+
+        <!-- Configuración de tiempos -->
+        <div class="pomodoro-config">
+          <label>
+            Trabajo
+            <!-- type="number" solo acepta números. min/max limitan el rango -->
+            <input type="number" id="workMinutes" value="25" min="1" max="90" />
+            min
+          </label>
+          <label>
+            Descanso
+            <input type="number" id="breakMinutes" value="5" min="1" max="30" />
+            min
+          </label>
+        </div>
+
+        <!-- Botones de control -->
+        <div class="pomodoro-btns">
+          <button class="pomo-btn" id="btnStart" onclick="startPomodoro()">▶ Iniciar</button>
+          <button class="pomo-btn" id="btnPause" onclick="pausePomodoro()">⏸ Pausar</button>
+          <button class="pomo-btn" id="btnReset" onclick="resetPomodoro()">↺ Reiniciar</button>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- =============================== -->
+  <!-- MODAL DE AJUSTES                -->
+  <!-- =============================== -->
+  <!-- position:fixed hace que tape toda la pantalla -->
+  <!-- display:none lo oculta por defecto -->
+  <div id="settingsOverlay" class="overlay" style="display:none">
+    <div class="modal">
+      <h3>Ajustes</h3>
+
+      <!-- Selector de tema visual -->
+      <div class="settings-section">
+        <h4>Tema de color</h4>
+        <p class="settings-desc">Los temas se desbloquean subiendo de nivel.</p>
+        <!-- app.js llenará este contenedor con los botones de tema -->
+        <div id="themeSelector" class="theme-grid"></div>
+      </div>
+
+      <button class="btn-primary" onclick="closeSettings()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- MODAL DE BIENVENIDA/VERSIÓN     -->
+  <!-- =============================== -->
+  <div id="welcomeOverlay" class="overlay" style="display:none">
+    <div class="modal">
+      <!-- app.js llenará este contenido con las novedades de la versión -->
+      <div id="welcomeContent"></div>
+      <button class="btn-primary" onclick="closeWelcome()">¡Empezar!</button>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- MODAL DE SUBIDA DE NIVEL        -->
+  <!-- =============================== -->
+  <div id="levelUpOverlay" class="overlay" style="display:none">
+    <div class="modal modal-center">
+      <div class="levelup-icon">★</div>
+      <h2 id="levelUpTitle">¡Subiste de nivel!</h2>
+      <p id="levelUpMsg"></p>
+      <button class="btn-primary" onclick="closeLevelUp()">Continuar</button>
+    </div>
+  </div>
+
+  <!-- Cargamos nuestro archivo JavaScript al final del body -->
+  <!-- Ponerlo al final garantiza que todo el HTML ya existe cuando el JS se ejecuta -->
+  <script src="app.js"></script>
+
+</body>
+</html>
