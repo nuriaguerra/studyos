@@ -345,8 +345,8 @@ function applyTheme() {
 
 // Alterna entre modo claro y oscuro
 function toggleMode() {
-  // Si está en nivel < 3, el modo claro no está desbloqueado
-  if (!state.user.darkMode && state.user.level < 3) {
+  // Si está en oscuro y está en nivel < 3, el modo claro no está desbloqueado
+  if (state.user.darkMode && state.user.level < 3) {
     alert('El modo claro se desbloquea en nivel 3.');
     return;
   }
