@@ -17,19 +17,19 @@ const STORAGE_KEY = 'studyos_data';
 
 // XP que da cada nivel de dificultad de tarea (1 = fácil, 5 = muy difícil)
 const XP_TAREA = {
-  1: 10,   // Fácil
-  2: 20,   // Normal
-  3: 35,   // Media
-  4: 55,   // Difícil
-  5: 80    // Muy difícil
+  1: 5,   // Fácil
+  2: 10,   // Normal
+  3: 15,   // Media
+  4: 25,   // Difícil
+  5: 35    // Muy difícil
 };
 
 // XP por otras acciones
-const XP_TEMA_SABIDO   = 15;   // Marcar un tema como "Me lo sé"
-const XP_ASIG_COMPLETA = 100;  // Completar todos los temas de una asignatura
-const XP_EXAMEN_BASE   = 50;   // XP base por aprobar un examen (se multiplica por nota)
-const XP_CUADRADO      = 5;    // XP por marcar un cuadradito de tarea prorateada
-const XP_CUADRADOS_FIN = 20;   // Bonus al terminar todos los cuadraditos
+const XP_TEMA_SABIDO   = 40;   // Marcar un tema como "Me lo sé"
+const XP_ASIG_COMPLETA = 200;  // Completar todos los temas de una asignatura
+const XP_EXAMEN_BASE   = 100;   // XP base por aprobar un examen (se multiplica por nota)
+const XP_CUADRADO      = 2;    // XP por marcar un cuadradito de tarea prorateada
+const XP_CUADRADOS_FIN = 10;   // Bonus al terminar todos los cuadraditos
 
 // Estados posibles de un tema, en orden de ciclo
 const ESTADOS_TEMA = ['none', 'leyendo', 'repasar', 'sabido'];
@@ -46,22 +46,26 @@ const ESTADO_INFO = {
 // Cada entrada tiene el nivel mínimo, el título del usuario y qué se desbloquea
 const NIVELES = [
   { nivel: 1,  titulo: 'Estudiante',   desbloqueo: 'Tema Burdeos desbloqueado' },
-  { nivel: 2,  titulo: 'Constante',    desbloqueo: 'Modo claro desbloqueado' },
-  { nivel: 3,  titulo: 'Dedicada',     desbloqueo: null },
-  { nivel: 5,  titulo: 'Aplicada',     desbloqueo: 'Tema Pizarra desbloqueado' },
-  { nivel: 8,  titulo: 'Imparable',    desbloqueo: 'Tema Tierra desbloqueado' },
-  { nivel: 10, titulo: 'Leyenda',      desbloqueo: 'Tema Negro total desbloqueado' },
-  { nivel: 15, titulo: 'Magistral',    desbloqueo: null },
-  { nivel: 20, titulo: 'Académica',    desbloqueo: null },
+  { nivel: 3,  titulo: 'Estudiante',    desbloqueo: 'Modo claro desbloqueado' },
+  { nivel: 5,  titulo: 'Constante',    desbloqueo: null },
+  { nivel: 7,  titulo: 'Constante',     desbloqueo: 'Tema Pizarra desbloqueado' },
+  { nivel: 9,  titulo: 'Dedicada',     desbloqueo: null },
+  { nivel: 11,  titulo: 'Dedicada',     desbloqueo: 'Tema Tierra desbloqueado'},
+  { nivel: 13,  titulo: 'Aplicada',     desbloqueo:  null},
+  { nivel: 15,  titulo: 'Aplicada',     desbloqueo: 'Tema Negro total desbloqueado'},
+  { nivel: 30,  titulo: 'Imparable',    desbloqueo: null },
+  { nivel: 50, titulo: 'Leyenda',      desbloqueo: null },
+  { nivel: 70, titulo: 'Magistral',    desbloqueo: null },
+  { nivel: 100, titulo: 'Académica',    desbloqueo: null },
 ];
 
 // Temas de color disponibles
 // className es la clase CSS que se aplica al <body>
 const TEMAS = {
   bordo:   { label: 'Burdeos',     nivel: 1,  className: 'theme-bordo'   },
-  pizarra: { label: 'Pizarra',     nivel: 5,  className: 'theme-pizarra' },
-  tierra:  { label: 'Tierra',      nivel: 8,  className: 'theme-tierra'  },
-  negro:   { label: 'Negro total', nivel: 10, className: 'theme-negro'   },
+  pizarra: { label: 'Pizarra',     nivel: 7,  className: 'theme-pizarra' },
+  tierra:  { label: 'Tierra',      nivel: 11,  className: 'theme-tierra'  },
+  negro:   { label: 'Negro total', nivel: 15, className: 'theme-negro'   },
 };
 
 // Novedades de la versión actual (se muestran en el modal de bienvenida)
@@ -197,9 +201,9 @@ function restoreOpenState(openAccordions, openDetails) {
 // ================================
 
 // Calcula cuánta XP hace falta para subir al siguiente nivel
-// Fórmula: 100 × nivel_actual
+// Fórmula: 400 × nivel_actual
 function xpParaSiguienteNivel(nivel) {
-  return 100 * nivel;
+  return 400 * nivel * nivel + 200 * nivel; // Fórmula ajustada para que los niveles suban más lentamente
 }
 
 // Añade XP al usuario y comprueba si sube de nivel
@@ -341,9 +345,9 @@ function applyTheme() {
 
 // Alterna entre modo claro y oscuro
 function toggleMode() {
-  // Si está en nivel < 2, el modo claro no está desbloqueado
-  if (!state.user.darkMode && state.user.level < 2) {
-    alert('El modo claro se desbloquea en nivel 2.');
+  // Si está en nivel < 3, el modo claro no está desbloqueado
+  if (!state.user.darkMode && state.user.level < 3) {
+    alert('El modo claro se desbloquea en nivel 3.');
     return;
   }
   state.user.darkMode = !state.user.darkMode;
